@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Record Management</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <style>
+        body{
+            display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+        
+    </style>
+    <div class="header-box">
+    <h1>Record Management</h1>
+</div>
+    <!-- Create Form -->
+    <form id="create-form">
+        <h2>Create Record</h2>
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="email" placeholder="Email">
+        <button type="button" onclick="createRecord()">Create</button>
+    </form>
+
+    <!-- Update Form -->
+    <form id="update-form">
+        <h2>Update Record</h2>
+        <input type="text" id="update-id" placeholder="ID">
+        <input type="text" id="update-name" placeholder="New Name">
+        <input type="text" id="update-email" placeholder="New Email">
+        <button type="button" onclick="updateRecord()">Update</button>
+    </form>
+
+    <!-- Delete Form -->
+    <form id="delete-form">
+        <h2>Delete Record</h2>
+        <input type="text" id="delete-id" placeholder="ID">
+        <button type="button" onclick="deleteRecord()">Delete</button>
+    </form>
+
+    <!-- Display Records -->
+    <h2>Record List</h2>
+    <ul id="record-list"></ul>
+
+    <script>
+        let records = [];
+        let recordId = 1;
+
+        function createRecord() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+
+            const newRecord = { id: recordId++, name, email };
+            records.push(newRecord);
+
+            displayRecords();
+            clearForm("create-form");
+        }
+
+        function displayRecords() {
+            const recordList = document.getElementById("record-list");
+            recordList.innerHTML = "";
+
+            for (const record of records) {
+                const li = document.createElement("li");
+                li.innerHTML = `ID: ${record.id}, Name: ${record.name}, Email: ${record.email}`;
+                recordList.appendChild(li);
+            }
+        }
+
+        function clearForm(formId) {
+            const form = document.getElementById(formId);
+            form.reset();
+        }
+
+        function updateRecord() {
+            const id = document.getElementById("update-id").value;
+            const name = document.getElementById("update-name").value;
+            const email = document.getElementById("update-email").value;
+
+            const recordToUpdate = records.find(record => record.id == id);
+
+            if (recordToUpdate) {
+                if (name) {
+                    recordToUpdate.name = name;
+                }
+                if (email) {
+                    recordToUpdate.email = email;
+                }
+                displayRecords();
+                clearForm("update-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        function deleteRecord() {
+            const id = document.getElementById("delete-id").value;
+            const index = records.findIndex(record => record.id == id);
+
+            if (index !== -1) {
+                records.splice(index, 1);
+                displayRecords();
+                clearForm("delete-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        // Initial display of records
+        displayRecords();
+    </script>
+</body>
+</html>
